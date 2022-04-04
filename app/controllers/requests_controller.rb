@@ -28,12 +28,18 @@ class RequestsController < ApplicationController
     def create
         @request = Request.new(request_params)
         @request.user_id = session[:user_id]
+        p "something"
+        p @current_user
+        p request
         if @request.save
+          p @request.inspect
           render json: {
             status: :created,
             request: @request
+            
           }
         else 
+          p @request.errors.full_messages
           render json: {
             status: 500,
             errors: @request.errors.full_messages
