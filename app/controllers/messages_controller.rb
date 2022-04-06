@@ -7,12 +7,12 @@ class MessagesController < ApplicationController
         @message = Message.new(message_params)
         if @message.save
             serialized_data = ActiveModelSerializers::Adapter::Json.new(
-            MessageSerializer.new(message)
+            MessageSerializer.new(@message)
             ).serializable_hash
-            MessagesChannel.broadcast_to chatroom, serialized_data
+            ChatChannel.broadcast_to @message.chatroom , serialized_data
             head :ok
         else
-            render json: message.errors.full_messages
+            render json: @message.errors.full_messages
         end
     end
         def show
